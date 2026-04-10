@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Friend, Memory, Story, ArchiveStats, ExportConfig, ChatHistory, SnapHistory } from '../types'
+import type { Friend, Memory, Story, ComputedArchiveStats, ExportConfig, ChatHistory, SnapHistory, StoryHistoryJson, MemoriesJson } from '../types'
 import type { ArchiveSession, ArchiveProgressCallback } from '../lib/snapArchive'
-import { createArchiveSession } from '../lib/snapArchive'
-import { buildArchiveSnapshot } from '../lib/dataTransform'
+import { createArchiveSession, SNAP_JSON_PATHS } from '../lib/snapArchive'
+import { computeStats } from '../lib/computeStats'
 import {
   AnalysisManager,
   StreakAnalyzer,
@@ -25,7 +25,8 @@ export const useArchiveStore = defineStore('archive', () => {
   const snapHistory = ref<SnapHistory | null>(null)
   const memoriesList = ref<Memory[]>([])
   const storiesList = ref<Story[]>([])
-  const archiveStats = ref<ArchiveStats | null>(null)
+  const archiveStats = ref<ComputedArchiveStats | null>(null)
+  const isLoadingStats = ref(false)
   const analysisManager = ref<AnalysisManager | null>(null)
   const analysisResults = ref<Map<string, unknown>>(new Map())
   const archiveSession = ref<ArchiveSession | null>(null)
@@ -72,10 +73,55 @@ export const useArchiveStore = defineStore('archive', () => {
     })
 
     archiveSession.value = session
-    const snapshot = buildArchiveSnapshot(session.metadata)
-    friendsList.value = snapshot.friends
-    archiveStats.value = snapshot.stats
+    friendsList.value = session.metadata.friends
+    // Stats will be computed lazily when the dashboard calls loadStats()
+    archiveStats.value = null
     initializeAnalyzers(session)
+  }
+
+  /**
+   * Lazy-load the heavy JSON files and compute all stats.
+   * Safe to call multiple times — returns immediately if stats are already loaded.
+   * Called by the dashboard on mount.
+   */
+  async function loadStats(): Promise<void> {
+    if (archiveStats.value !== null) return
+    if (!archiveSession.value) return
+    if (isLoadingStats.value) return
+
+    isLoadingStats.value = true
+    const { reader, metadata } = archiveSession.value
+
+    try {
+      updateProgress(10, 'Loading snap history')
+      const snap = await reader.readJsonFile<SnapHistory>(SNAP_JSON_PATHS.snapHistory)
+      snapHistory.value = snap
+
+      updateProgress(35, 'Loading chat history')
+      const chat = await reader.readJsonFile<ChatHistory>(SNAP_JSON_PATHS.chatHistory)
+      chatHistory.value = chat
+
+      updateProgress(60, 'Loading story history')
+      const storyJson = await reader.readJsonFile<StoryHistoryJson>(SNAP_JSON_PATHS.storyHistory)
+      storiesList.value = storyJson?.['Your Story Views'] ?? []
+
+      updateProgress(75, 'Loading memories')
+      const memoriesJson = await reader.readJsonFile<MemoriesJson>(SNAP_JSON_PATHS.memoriesHistory)
+      memoriesList.value = memoriesJson?.['Saved Media'] ?? []
+
+      updateProgress(90, 'Computing stats')
+      archiveStats.value = computeStats({
+        account: metadata.account,
+        friends: metadata.friends,
+        snapHistory: snap,
+        chatHistory: chat,
+        storyHistory: storyJson,
+      })
+
+      updateProgress(100, 'Done')
+    } finally {
+      isLoadingStats.value = false
+    }
   }
 
   function initializeAnalyzers(session: ArchiveSession) {
@@ -122,6 +168,7 @@ export const useArchiveStore = defineStore('archive', () => {
     memoriesList.value = []
     storiesList.value = []
     archiveStats.value = null
+    isLoadingStats.value = false
     analysisManager.value = null
     analysisResults.value = new Map()
     archiveSession.value = null
@@ -141,6 +188,7 @@ export const useArchiveStore = defineStore('archive', () => {
     memoriesList,
     storiesList,
     archiveStats,
+    isLoadingStats,
     exportConfig,
     analysisResults,
     archiveSession,
@@ -153,6 +201,7 @@ export const useArchiveStore = defineStore('archive', () => {
     updateProgress,
     completeProcessing,
     prepareArchive,
+    loadStats,
     runAnalyzer,
     setSelectedFiles,
     setAIConsent,

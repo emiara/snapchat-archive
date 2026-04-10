@@ -57,6 +57,7 @@ export interface Story {
 
 export interface StoryHistoryJson {
   "Your Story Views": Story[]
+  "Friend and Public Story Views"?: Story[]
 }
 
 export interface DeviceRecord {
@@ -88,19 +89,31 @@ export interface ArchiveMetadata {
   }
 }
 
-export interface ArchiveStats {
+export interface TopFriendEntry {
+  username: string
+  displayName: string
+  totalMessages: number
+  sentMessages: number
+  receivedMessages: number
+}
+
+export interface ComputedArchiveStats {
   totalSnaps: number
   totalChats: number
   totalStories: number
   totalFriends: number
+  bestStreak: number
   dateRange: {
     start: string
     end: string
   }
   totalDays: number
-  bestStreak: number
+  topFriends: TopFriendEntry[]
   totalMediaSize: string
 }
+
+// Legacy alias kept to avoid breaking imports during migration
+export type ArchiveStats = ComputedArchiveStats
 
 export interface ExportConfig {
   includeSnaps: boolean

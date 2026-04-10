@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useArchiveStore } from '../stores/archive'
 import StatCard from '../components/StatCard.vue'
 
 const archiveStore = useArchiveStore()
 
 const stats = computed(() => archiveStore.archiveStats)
-const friends = computed(() => archiveStore.friendsList)
+const isLoadingStats = computed(() => archiveStore.isLoadingStats)
 
 const importedDate = computed(() => {
   if (!archiveStore.importedDate) return ''
@@ -20,6 +20,10 @@ const importedDate = computed(() => {
 function formatNumber(num: number): string {
   return num.toLocaleString()
 }
+
+onMounted(() => {
+  archiveStore.loadStats()
+})
 </script>
 
 <template>
@@ -43,17 +47,17 @@ function formatNumber(num: number): string {
         <div class="stats-grid">
           <StatCard
             icon="📸"
-            :value="formatNumber(stats?.totalSnaps || 0)"
+            :value="isLoadingStats ? '…' : formatNumber(stats?.totalSnaps || 0)"
             label="Total snaps"
           />
           <StatCard
             icon="💬"
-            :value="formatNumber(stats?.totalChats || 0)"
+            :value="isLoadingStats ? '…' : formatNumber(stats?.totalChats || 0)"
             label="Chat messages"
           />
           <StatCard
             icon="📖"
-            :value="formatNumber(stats?.totalStories || 0)"
+            :value="isLoadingStats ? '…' : formatNumber(stats?.totalStories || 0)"
             label="Stories posted"
           />
           <StatCard
@@ -115,20 +119,24 @@ function formatNumber(num: number): string {
       </section>
 
       <section class="friends-section">
-        <h2 class="section-heading">People who defined the era</h2>
-        <div class="friends-grid">
-          <div v-for="(friend, index) in friends.slice(0, 4)" :key="index" class="card friend-card">
+        <h2 class="section-heading">Most messaged friends</h2>
+        <p v-if="isLoadingStats" class="section-subtitle">Loading...</p>
+        <div v-else-if="stats?.topFriends?.length" class="friends-grid">
+          <div v-for="(friend, index) in stats.topFriends.slice(0, 4)" :key="index" class="card friend-card">
             <div class="friend-avatar">
-              {{ (friend['Display Name'] || friend.Username).charAt(0) }}
+              {{ (friend.displayName || friend.username).charAt(0).toUpperCase() }}
             </div>
             <div class="friend-info">
-              <h3 class="friend-name">{{ friend['Display Name'] || friend.Username }}</h3>
+              <h3 class="friend-name">{{ friend.displayName || friend.username }}</h3>
               <p class="friend-stats">
-                Added {{ friend['Creation Timestamp'] ? new Date(friend['Creation Timestamp']).toLocaleDateString() : 'unknown' }}
+                {{ formatNumber(friend.totalMessages) }} messages
+                &middot;
+                {{ formatNumber(friend.sentMessages) }} sent
               </p>
             </div>
           </div>
         </div>
+        <p v-else class="section-subtitle">No chat data found.</p>
       </section>
 
       <section class="card export-section">

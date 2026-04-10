@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useArchiveStore } from '../stores/archive'
 
 const archiveStore = useArchiveStore()
 
 const stats = computed(() => archiveStore.archiveStats)
+const isLoadingStats = computed(() => archiveStore.isLoadingStats)
 const hasAIConsent = computed(() => archiveStore.hasAIConsent)
 const analysisResults = computed(() => archiveStore.analysisResults)
 
+onMounted(() => {
+  archiveStore.loadStats()
+})
 </script>
 
 <template>
@@ -36,21 +40,22 @@ const analysisResults = computed(() => archiveStore.analysisResults)
       <template v-if="hasAIConsent">
         <section class="stats-summary">
           <h2 class="section-heading">Your archive in numbers</h2>
-          <div class="stats-grid-simple">
+          <p v-if="isLoadingStats" class="section-subtitle">Computing stats…</p>
+          <div v-else class="stats-grid-simple">
             <div class="stat-item">
-              <span class="stat-value">{{ stats?.totalSnaps.toLocaleString() }}</span>
+              <span class="stat-value">{{ (stats?.totalSnaps ?? 0).toLocaleString() }}</span>
               <span class="stat-label">snaps sent and received</span>
             </div>
             <div class="stat-item">
-              <span class="stat-value">{{ stats?.totalChats.toLocaleString() }}</span>
+              <span class="stat-value">{{ (stats?.totalChats ?? 0).toLocaleString() }}</span>
               <span class="stat-label">chat messages</span>
             </div>
             <div class="stat-item">
-              <span class="stat-value">{{ stats?.totalDays.toLocaleString() }}</span>
+              <span class="stat-value">{{ (stats?.totalDays ?? 0).toLocaleString() }}</span>
               <span class="stat-label">days of memories</span>
             </div>
             <div class="stat-item">
-              <span class="stat-value">{{ stats?.totalFriends }}</span>
+              <span class="stat-value">{{ stats?.totalFriends ?? 0 }}</span>
               <span class="stat-label">friends</span>
             </div>
           </div>
