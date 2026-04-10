@@ -7,24 +7,15 @@ import type { Memory } from '../types'
 const archiveStore = useArchiveStore()
 
 const selectedType = ref<string>('all')
-const selectedFriend = ref<string>('all')
-const selectedSaved = ref<string>('all')
 const selectedYear = ref<string>('all')
 const selectedMemory = ref<Memory | null>(null)
 
-const types = ['all', 'snap', 'chat', 'story']
-const savedOptions = ['all', 'saved', 'unsaved']
-
-const friends = computed(() => {
-  const friendSet = new Set<string>()
-  archiveStore.memoriesList.forEach((memory) => friendSet.add(memory.sender))
-  return ['all', ...Array.from(friendSet).sort()]
-})
+const types = ['all', 'Image', 'Video']
 
 const years = computed(() => {
   const yearSet = new Set<string>()
   archiveStore.memoriesList.forEach((memory) => {
-    yearSet.add(memory.date.substring(0, 4))
+    yearSet.add(memory.Date.substring(0, 4))
   })
   return ['all', ...Array.from(yearSet).sort().reverse()]
 })
@@ -32,14 +23,11 @@ const years = computed(() => {
 const filteredMemories = computed(() => {
   return archiveStore.memoriesList
     .filter((memory) => {
-      if (selectedType.value !== 'all' && memory.type !== selectedType.value) return false
-      if (selectedFriend.value !== 'all' && memory.sender !== selectedFriend.value) return false
-      if (selectedSaved.value === 'saved' && !memory.isSaved) return false
-      if (selectedSaved.value === 'unsaved' && memory.isSaved) return false
-      if (selectedYear.value !== 'all' && !memory.date.startsWith(selectedYear.value)) return false
+      if (selectedType.value !== 'all' && memory['Media Type'] !== selectedType.value) return false
+      if (selectedYear.value !== 'all' && !memory.Date.startsWith(selectedYear.value)) return false
       return true
     })
-    .sort((a, b) => b.timestamp - a.timestamp)
+    .sort((a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime())
 })
 
 function selectMemory(memory: Memory) {
@@ -71,31 +59,17 @@ function closeDetail() {
         </div>
 
         <div class="filter-group">
-          <label for="friend-filter" class="filter-label">From</label>
-          <select id="friend-filter" v-model="selectedFriend" class="filter-select">
-            <option v-for="friend in friends" :key="friend" :value="friend">{{ friend === 'all' ? 'Everyone' : friend }}</option>
-          </select>
-        </div>
-
-        <div class="filter-group">
           <label for="year-filter" class="filter-label">Year</label>
           <select id="year-filter" v-model="selectedYear" class="filter-select">
             <option v-for="year in years" :key="year" :value="year">{{ year === 'all' ? 'All years' : year }}</option>
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label for="saved-filter" class="filter-label">Saved</label>
-          <select id="saved-filter" v-model="selectedSaved" class="filter-select">
-            <option v-for="saved in savedOptions" :key="saved" :value="saved">{{ saved === 'all' ? 'All' : saved }}</option>
           </select>
         </div>
       </div>
 
       <div class="memories-grid" v-if="filteredMemories.length > 0">
         <MemoryCard
-          v-for="memory in filteredMemories"
-          :key="memory.id"
+          v-for="(memory, index) in filteredMemories"
+          :key="index"
           :memory="memory"
           @click="selectMemory(memory)"
         />
@@ -103,7 +77,7 @@ function closeDetail() {
 
       <div v-else class="empty-state">
         <p>No memories match those filters.</p>
-        <button class="btn btn-secondary" @click="selectedType = 'all'; selectedFriend = 'all'; selectedSaved = 'all'; selectedYear = 'all'">
+        <button class="btn btn-secondary" @click="selectedType = 'all'; selectedYear = 'all'">
           Clear filters
         </button>
       </div>
@@ -115,23 +89,19 @@ function closeDetail() {
           <button class="close-btn" @click="closeDetail" aria-label="Close">×</button>
 
           <div class="detail-header">
-            <span class="detail-type badge" :class="'badge-' + selectedMemory.type">{{ selectedMemory.type }}</span>
-            <span class="detail-date">{{ selectedMemory.date }}</span>
+            <span class="detail-type badge">{{ selectedMemory['Media Type'] }}</span>
+            <span class="detail-date">{{ selectedMemory.Date }}</span>
           </div>
 
           <div class="detail-content">
             <div class="detail-preview">
               <div class="preview-placeholder">
-                <span>{{ selectedMemory.mediaType === 'video' ? '🎬' : '🖼️' }}</span>
+                <span>{{ selectedMemory['Media Type'] === 'Video' ? '🎬' : '🖼️' }}</span>
               </div>
             </div>
 
             <div class="detail-info">
-              <p><strong>From:</strong> {{ selectedMemory.sender }}</p>
-              <p v-if="selectedMemory.recipient"><strong>To:</strong> {{ selectedMemory.recipient }}</p>
-              <p v-if="selectedMemory.caption"><strong>Caption:</strong> {{ selectedMemory.caption }}</p>
-              <p v-if="selectedMemory.duration"><strong>Duration:</strong> {{ selectedMemory.duration }}s</p>
-              <p><strong>Status:</strong> {{ selectedMemory.isSaved ? 'Saved' : 'Not saved' }}</p>
+              <p v-if="selectedMemory.Location"><strong>Location:</strong> {{ selectedMemory.Location }}</p>
             </div>
           </div>
         </div>

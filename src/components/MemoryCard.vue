@@ -3,9 +3,9 @@
     <div class="memory-header">
       <div class="memory-type">
         <span class="type-icon">{{ typeIcon }}</span>
-        <span class="type-label">{{ memory.type }}</span>
+        <span class="type-label">{{ memory['Media Type'] }}</span>
       </div>
-      <time :datetime="memory.date" class="memory-date">
+      <time :datetime="memory.Date" class="memory-date">
         {{ formattedDate }}
       </time>
     </div>
@@ -15,28 +15,14 @@
         <div class="media-placeholder">
           <span class="media-icon">{{ mediaIcon }}</span>
         </div>
-        <div v-if="memory.streak" class="streak-badge" title="Streak">
-          🔥
-        </div>
-        <div v-if="memory.isSaved" class="saved-badge" title="Saved">
-          <span>★</span>
-        </div>
       </div>
 
       <div class="memory-meta">
-        <p class="memory-sender">
-          <span class="sender-label">From:</span>
-          <strong>{{ formatSender(memory.sender) }}</strong>
-        </p>
-        <p v-if="memory.recipient && memory.recipient !== 'me'" class="memory-recipient">
-          <span class="recipient-label">To:</span>
-          <span>{{ formatSender(memory.recipient) }}</span>
+        <p v-if="memory.Location" class="memory-location">
+          <span class="location-label">Location:</span>
+          <span>{{ memory.Location }}</span>
         </p>
       </div>
-
-      <p v-if="memory.caption" class="memory-caption">
-        {{ memory.caption }}
-      </p>
     </div>
   </article>
 </template>
@@ -50,26 +36,15 @@ const props = defineProps<{
 }>()
 
 const typeIcon = computed(() => {
-  const icons: Record<string, string> = {
-    snap: '📸',
-    chat: '💬',
-    story: '📖',
-    spotlight: '✨'
-  }
-  return icons[props.memory.type] || '📷'
+  return props.memory['Media Type'] === 'Video' ? '🎬' : '🖼️'
 })
 
 const mediaIcon = computed(() => {
-  if (!props.memory.mediaType) return '💭'
-  const icons: Record<string, string> = {
-    image: '🖼️',
-    video: '🎬'
-  }
-  return icons[props.memory.mediaType] || '📷'
+  return props.memory['Media Type'] === 'Video' ? '🎬' : '🖼️'
 })
 
 const formattedDate = computed(() => {
-  return new Date(props.memory.date).toLocaleDateString('en-US', {
+  return new Date(props.memory.Date).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
@@ -77,13 +52,8 @@ const formattedDate = computed(() => {
 })
 
 const memoryLabel = computed(() => {
-  return `${props.memory.type} from ${props.memory.sender} on ${props.memory.date}`
+  return `Memory from ${props.memory.Date}`
 })
-
-function formatSender(sender: string): string {
-  if (sender === 'me') return 'You'
-  return sender.replace(/_/g, ' ').replace(/\./g, ' ')
-}
 </script>
 
 <style scoped>
@@ -149,49 +119,19 @@ function formatSender(sender: string): string {
   background: linear-gradient(135deg, rgba(243, 203, 69, 0.18) 0%, rgba(31, 105, 88, 0.08) 100%);
 }
 
-.streak-badge,
-.saved-badge {
-  position: absolute;
-  top: var(--space-sm);
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
-}
-
-.streak-badge {
-  right: var(--space-sm);
-}
-
-.saved-badge {
-  left: var(--space-sm);
-}
-
 .memory-meta {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
 }
 
-.memory-sender,
-.memory-recipient {
+.memory-location {
   font-size: 0.875rem;
   color: var(--text-soft);
 }
 
-.sender-label,
-.recipient-label {
+.location-label {
   color: var(--text-soft);
   margin-right: var(--space-xs);
-}
-
-.memory-caption {
-  font-size: 0.9rem;
-  color: var(--text-h);
-  line-height: 1.5;
-  padding: var(--space-sm);
-  background: rgba(255, 255, 255, 0.62);
-  border-radius: 14px;
 }
 </style>

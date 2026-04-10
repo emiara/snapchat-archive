@@ -1,35 +1,27 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useArchiveStore } from '../stores/archive'
 
 const router = useRouter()
 const archiveStore = useArchiveStore()
 
-let timer: ReturnType<typeof setTimeout> | null = null
-
 async function runProcessingSequence() {
-  const steps = [
-    { progress: 18, status: 'Reading the takeout zip' },
-    { progress: 34, status: 'Mapping memories and saved media' },
-    { progress: 58, status: 'Indexing chats, streaks, and story history' },
-    { progress: 82, status: 'Building the recap view' },
-    { progress: 100, status: 'Recap ready' },
-  ]
-
-  for (const step of steps) {
-    await new Promise((resolve) => {
-      timer = setTimeout(resolve, 650)
-    })
-    archiveStore.updateProgress(step.progress, step.status)
+  if (!archiveStore.selectedFiles.length) {
+    router.push('/import')
+    return
   }
 
-  archiveStore.loadArchive()
-  archiveStore.completeProcessing()
+  archiveStore.updateProgress(5, 'Preparing archive session')
 
-  timer = setTimeout(() => {
+  try {
+    await archiveStore.prepareArchive(archiveStore.selectedFiles)
+    archiveStore.completeProcessing()
     router.push('/dashboard')
-  }, 700)
+  } catch (error) {
+    console.error('Failed to process archive', error)
+    archiveStore.updateProgress(0, 'Failed to process archive')
+  }
 }
 
 onMounted(() => {
@@ -44,10 +36,6 @@ onMounted(() => {
   }
 
   runProcessingSequence()
-})
-
-onUnmounted(() => {
-  if (timer) clearTimeout(timer)
 })
 </script>
 

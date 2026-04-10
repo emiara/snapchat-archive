@@ -1,34 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useArchiveStore } from '../stores/archive'
-import HighlightCard from '../components/HighlightCard.vue'
 
 const archiveStore = useArchiveStore()
 
-const highlights = computed(() => archiveStore.highlights)
 const stats = computed(() => archiveStore.archiveStats)
 const hasAIConsent = computed(() => archiveStore.hasAIConsent)
+const analysisResults = computed(() => archiveStore.analysisResults)
 
-function getCategoryLabel(category: string): string {
-  const labels: Record<string, string> = {
-    relationship: 'Relationships',
-    milestone: 'Milestones',
-    memory: 'Memories',
-    stat: 'Statistics'
-  }
-  return labels[category] || category
-}
-
-const groupedHighlights = computed(() => {
-  const groups: Record<string, typeof highlights.value> = {}
-  highlights.value.forEach((highlight) => {
-    if (!groups[highlight.category]) {
-      groups[highlight.category] = []
-    }
-    groups[highlight.category].push(highlight)
-  })
-  return groups
-})
 </script>
 
 <template>
@@ -77,14 +56,19 @@ const groupedHighlights = computed(() => {
           </div>
         </section>
 
-        <section v-for="(items, category) in groupedHighlights" :key="category" class="highlight-section">
-          <h2 class="section-heading">{{ getCategoryLabel(category) }}</h2>
-          <div class="highlights-list">
-            <HighlightCard
-              v-for="highlight in items"
-              :key="highlight.id"
-              :highlight="highlight"
-            />
+        <section class="analysis-section">
+          <h2 class="section-heading">Analysis Results</h2>
+          <p class="section-subtitle">
+            Run analyzers from the archive store to see insights about your Snapchat history.
+          </p>
+          <div v-if="analysisResults.size > 0" class="analysis-results">
+            <div v-for="[key, value] in Array.from(analysisResults.entries())" :key="key" class="analysis-item card">
+              <h3>{{ key }}</h3>
+              <pre>{{ JSON.stringify(value, null, 2) }}</pre>
+            </div>
+          </div>
+          <div v-else class="empty-state">
+            <p>No analysis results yet. Run analyzers to generate insights.</p>
           </div>
         </section>
 

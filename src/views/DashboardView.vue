@@ -2,13 +2,11 @@
 import { computed } from 'vue'
 import { useArchiveStore } from '../stores/archive'
 import StatCard from '../components/StatCard.vue'
-import HighlightCard from '../components/HighlightCard.vue'
 
 const archiveStore = useArchiveStore()
 
 const stats = computed(() => archiveStore.archiveStats)
 const friends = computed(() => archiveStore.friendsList)
-const highlights = computed(() => archiveStore.highlights)
 
 const importedDate = computed(() => {
   if (!archiveStore.importedDate) return ''
@@ -111,31 +109,22 @@ function formatNumber(num: number): string {
       <section class="highlights-section">
         <h2 class="section-heading">Recap highlights</h2>
         <p class="section-subtitle">
-          The point here is reflection, not raw extraction.
+          Run analysis to generate insights about your Snapchat history.
           <router-link to="/summary">Open the full narrative</router-link>
         </p>
-
-        <div class="highlights-grid">
-          <HighlightCard
-            v-for="highlight in highlights.slice(0, 3)"
-            :key="highlight.id"
-            :highlight="highlight"
-          />
-        </div>
       </section>
 
       <section class="friends-section">
         <h2 class="section-heading">People who defined the era</h2>
         <div class="friends-grid">
-          <div v-for="friend in friends.slice(0, 4)" :key="friend.id" class="card friend-card">
+          <div v-for="(friend, index) in friends.slice(0, 4)" :key="index" class="card friend-card">
             <div class="friend-avatar">
-              {{ friend.displayName.charAt(0) }}
+              {{ (friend['Display Name'] || friend.Username).charAt(0) }}
             </div>
             <div class="friend-info">
-              <h3 class="friend-name">{{ friend.displayName }}</h3>
+              <h3 class="friend-name">{{ friend['Display Name'] || friend.Username }}</h3>
               <p class="friend-stats">
-                <span v-if="friend.streak">🔥 {{ friend.streak }} day streak</span>
-                <span v-else>{{ friend.snapCount }} snaps</span>
+                Added {{ friend['Creation Timestamp'] ? new Date(friend['Creation Timestamp']).toLocaleDateString() : 'unknown' }}
               </p>
             </div>
           </div>

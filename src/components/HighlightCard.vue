@@ -25,10 +25,17 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { AIHighlight } from '../types'
+
+interface Highlight {
+  category: string
+  title: string
+  description: string
+  confidence?: string
+  relatedMemories?: string[]
+}
 
 const props = defineProps<{
-  highlight: AIHighlight
+  highlight: Highlight
 }>()
 
 const categoryIcon = computed(() => {
@@ -47,7 +54,8 @@ const confidenceLabel = computed(() => {
     medium: 'Medium confidence',
     low: 'Low confidence'
   }
-  return labels[props.highlight.confidence] || 'Unknown confidence'
+  const confidence = props.highlight.confidence || 'medium'
+  return labels[confidence] || 'Unknown confidence'
 })
 
 const relatedCount = computed(() => props.highlight.relatedMemories?.length || 0)

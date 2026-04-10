@@ -12,10 +12,12 @@ const isStarting = ref(false)
 
 function handleFiles(selectedFiles: File[]) {
   files.value = selectedFiles
+  archiveStore.setSelectedFiles(selectedFiles)
 }
 
 function resetFiles() {
   files.value = []
+  archiveStore.setSelectedFiles([])
 }
 
 async function startImport() {

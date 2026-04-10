@@ -1,62 +1,91 @@
-export interface Memory {
-  id: string
-  type: 'snap' | 'chat' | 'story' | 'spotlight'
-  date: string
-  timestamp: number
-  sender: string
-  recipient?: string
-  mediaType?: 'image' | 'video'
-  mediaUrl?: string
-  thumbnailUrl?: string
-  caption?: string
-  duration?: number
-  location?: string
-  isSaved: boolean
-  streak?: boolean
+export interface Friend {
+  Username: string
+  "Display Name": string
+  "Creation Timestamp": string
+  "Last Modified Timestamp": string
+  Source: string
 }
 
-export interface Chat {
-  id: string
-  friendId: string
-  friendName: string
-  friendDisplayName?: string
-  friendAvatar?: string
-  messages: ChatMessage[]
-  lastMessageDate: string
-  messageCount: number
-  isBestFriend: boolean
-  streak?: number
+export interface FriendsJson {
+  Friends: Friend[]
 }
 
 export interface ChatMessage {
-  id: string
-  sender: 'me' | 'friend'
-  content: string
-  timestamp: number
-  date: string
-  type: 'text' | 'media' | 'sticker'
+  From: string
+  "Media Type": 'TEXT' | 'IMAGE' | 'VIDEO' | 'STICKER' | 'AUDIO' | 'GIF' | 'ATTACHMENT'
+  Created: string
+  Content: string | null
+  "Conversation Title": string | null
+  IsSender: boolean
+  "Created(microseconds)": number
+  IsSaved: boolean
+  "Media IDs": string
 }
 
-export interface Friend {
-  id: string
-  name: string
-  displayName: string
-  avatar?: string
-  isBestFriend: boolean
-  streak?: number
-  snapCount: number
-  chatCount: number
-  firstInteraction: string
-  lastInteraction: string
+export type ChatThread = ChatMessage[]
+
+export type ChatHistory = Record<string, ChatThread>
+
+export interface SnapEntry {
+  From: string
+  "Media Type": 'IMAGE' | 'VIDEO' | 'UNKNOWN'
+  Created: string
+  "Conversation Title": string | null
+  IsSender: boolean
+  "Created(microseconds)": number
+}
+
+export type SnapHistory = Record<string, SnapEntry[]>
+
+export interface Memory {
+  Date: string
+  "Media Type": 'Image' | 'Video'
+  Location?: string
+  "Download Link"?: string
+  "Media Download Url"?: string
+}
+
+export interface MemoriesJson {
+  "Saved Media": Memory[]
 }
 
 export interface Story {
-  id: string
-  date: string
-  timestamp: number
-  snapCount: number
-  viewCount?: number
-  screenshotCount?: number
+  "Story Date": string
+  "Story Views": number
+  "Story Replies": number
+}
+
+export interface StoryHistoryJson {
+  "Your Story Views": Story[]
+}
+
+export interface DeviceRecord {
+  Make: string
+  Model?: string
+  "Start Time": string
+  "Device Type": string
+}
+
+export interface Account {
+  "Basic Information": {
+    Username: string
+    Name?: string
+    "Creation Date"?: string
+    "Last Active"?: string
+  }
+  "Device History"?: DeviceRecord[]
+}
+
+export interface ArchiveMetadata {
+  account: Account | null
+  friends: Friend[]
+  stats: {
+    friendCount: number
+    hasChatHistory: boolean
+    hasSnapHistory: boolean
+    hasMemoriesHistory: boolean
+    hasStoryHistory: boolean
+  }
 }
 
 export interface ArchiveStats {
@@ -73,15 +102,6 @@ export interface ArchiveStats {
   totalMediaSize: string
 }
 
-export interface AIHighlight {
-  id: string
-  category: 'relationship' | 'milestone' | 'memory' | 'stat'
-  title: string
-  description: string
-  confidence: 'high' | 'medium' | 'low'
-  relatedMemories?: string[]
-}
-
 export interface ExportConfig {
   includeSnaps: boolean
   includeChats: boolean
@@ -93,3 +113,10 @@ export interface ExportConfig {
     end: string
   }
 }
+
+export type { Friend as SnapchatFriendRecord }
+export type { ChatMessage as SnapchatChatMessageRecord }
+export type { SnapEntry as SnapchatSnapHistoryEntry }
+export type { Memory as SnapchatMemoryRecord }
+export type { Story as SnapchatStoryHistoryRecord }
+export type { Account as SnapchatAccountJson }
