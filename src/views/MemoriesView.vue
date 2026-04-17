@@ -67,12 +67,8 @@ function closeDetail() {
       </div>
 
       <div class="memories-grid" v-if="filteredMemories.length > 0">
-        <MemoryCard
-          v-for="(memory, index) in filteredMemories"
-          :key="index"
-          :memory="memory"
-          @click="selectMemory(memory)"
-        />
+        <MemoryCard v-for="(memory, index) in filteredMemories" :key="index" :memory="memory"
+          @click="selectMemory(memory)" />
       </div>
 
       <div v-else class="empty-state">

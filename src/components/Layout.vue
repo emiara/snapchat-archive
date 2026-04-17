@@ -9,6 +9,7 @@ const store = useArchiveStore()
 
 const isMobileMenuOpen = ref(false)
 
+// Only active after archive upload
 const archiveNavItems = [
   { path: '/dashboard', label: 'Recap' },
   { path: '/memories', label: 'Review' },
@@ -49,59 +50,34 @@ function resetArchive() {
         </router-link>
 
         <nav class="nav-desktop">
-          <button
-            v-for="item in activeNavItems"
-            :key="item.path"
-            class="nav-link"
-            :class="{ active: route.path === item.path }"
-            @click="navigateTo(item.path)"
-          >
+          <button v-for="item in activeNavItems" :key="item.path" class="nav-link"
+            :class="{ active: route.path === item.path }" @click="navigateTo(item.path)">
             {{ item.label }}
           </button>
         </nav>
 
         <div class="header-actions">
-          <button
-            v-if="!store.isImported"
-            class="btn btn-primary btn-sm"
-            @click="navigateTo('/import')"
-          >
+          <button v-if="!store.isImported" class="btn btn-primary btn-sm" @click="navigateTo('/import')">
             Load a zip
           </button>
-          <button
-            v-else
-            class="btn btn-secondary btn-sm"
-            @click="resetArchive"
-          >
+          <button v-else class="btn btn-secondary btn-sm" @click="resetArchive">
             Start over
           </button>
         </div>
 
-        <button
-          class="mobile-menu-btn"
-          @click="isMobileMenuOpen = !isMobileMenuOpen"
-          :aria-label="isMobileMenuOpen ? 'Close menu' : 'Open menu'"
-        >
+        <button class="mobile-menu-btn" @click="isMobileMenuOpen = !isMobileMenuOpen"
+          :aria-label="isMobileMenuOpen ? 'Close menu' : 'Open menu'">
           <span class="hamburger" :class="{ open: isMobileMenuOpen }"></span>
         </button>
       </div>
 
       <Transition name="slide">
         <nav class="nav-mobile" v-if="isMobileMenuOpen">
-          <button
-            v-for="item in activeNavItems"
-            :key="item.path"
-            class="nav-link"
-            :class="{ active: route.path === item.path }"
-            @click="navigateTo(item.path)"
-          >
+          <button v-for="item in activeNavItems" :key="item.path" class="nav-link"
+            :class="{ active: route.path === item.path }" @click="navigateTo(item.path)">
             {{ item.label }}
           </button>
-          <button
-            v-if="!store.isImported"
-            class="btn btn-primary"
-            @click="navigateTo('/import')"
-          >
+          <button v-if="!store.isImported" class="btn btn-primary" @click="navigateTo('/import')">
             Open import
           </button>
         </nav>
@@ -116,7 +92,8 @@ function resetArchive() {
       <div class="footer-inner">
         <div class="footer-brand">
           <span class="footer-eyebrow">Goodbye Snapchat</span>
-          <p class="footer-tagline">Review your takeout locally, get a recap of the era, and move the photos somewhere you actually control.</p>
+          <p class="footer-tagline">Review your takeout locally, get a recap of the era, and move the photos somewhere
+            you actually control.</p>
         </div>
         <nav class="footer-nav">
           <router-link to="/privacy">Privacy</router-link>
@@ -334,6 +311,7 @@ function resetArchive() {
 }
 
 @media (max-width: 900px) {
+
   .nav-desktop,
   .header-actions {
     display: none;

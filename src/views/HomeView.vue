@@ -36,7 +36,8 @@
 
           <div class="preview-story">
             <p class="story-label">Your recap</p>
-            <h2>A five-year thread with Sarah. Birthdays, graduations, late-night plans—your archive peaks around what mattered.</h2>
+            <h2>A five-year thread with Sarah. Birthdays, graduations, late-night plans—your archive peaks around what
+              mattered.</h2>
           </div>
 
           <div class="preview-rail">
@@ -46,7 +47,7 @@
             </div>
             <div class="rail-block accent">
               <span class="rail-title">Export</span>
-              <p>Immich-ready, or keep the JSON.</p>
+              <p>Take your memories with you, into a new tomorrow.</p>
             </div>
           </div>
         </div>
@@ -265,7 +266,7 @@
   color: var(--text-h);
 }
 
-.trust-line > p {
+.trust-line>p {
   color: var(--text-soft);
   font-size: 0.95rem;
   max-width: 480px;

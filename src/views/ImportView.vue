@@ -43,7 +43,7 @@ async function startImport() {
         <span class="eyebrow">Import your takeout</span>
         <h1>Drop the Snapchat zip and start the goodbye flow.</h1>
         <p class="page-subtitle">
-          This is the entry point for the recap: open the takeout locally, build a private session in the browser, and move toward export when you are ready.
+          This is the entry point for the recap: open the takeout locally, build a private session in the browser, and
         </p>
       </header>
 
@@ -52,17 +52,10 @@ async function startImport() {
           <FileDropzone @file="handleFiles" />
 
           <div v-if="files.length" class="import-actions">
-            <button
-              class="btn btn-primary"
-              @click="startImport"
-              :disabled="isStarting"
-            >
+            <button class="btn btn-primary" @click="startImport" :disabled="isStarting">
               {{ isStarting ? 'Preparing session...' : 'Build my recap' }}
             </button>
-            <button
-              class="btn btn-secondary"
-              @click="resetFiles"
-            >
+            <button class="btn btn-secondary" @click="resetFiles">
               Pick different zips
             </button>
           </div>
@@ -74,7 +67,7 @@ async function startImport() {
             <ul class="info-list">
               <li>Turn a Snapchat takeout into a readable end-of-era recap.</li>
               <li>Review memories and saved media without leaving the browser.</li>
-              <li>Package your images and videos for Immich or JSON export.</li>
+              <li>Package your images and videos for Immich, Google photos, or Apple Photos export.</li>
             </ul>
           </section>
 
@@ -102,7 +95,8 @@ async function startImport() {
       <section class="import-footnote card">
         <div>
           <span class="footnote-label">After import</span>
-          <p>The next screens focus on recap, review, and export, so the flow feels like leaving Snapchat with your history intact instead of just hoarding a zip file.</p>
+          <p>The next screens focus on recap, review, and export, so the flow feels like leaving Snapchat with your
+            history intact instead of just hoarding a zip file.</p>
         </div>
       </section>
     </div>

@@ -34,7 +34,8 @@ onMounted(() => {
           <span class="eyebrow">Recap overview</span>
           <h1>Your Snapchat chapter, compressed.</h1>
           <p class="page-subtitle">
-            Session opened on {{ importedDate }}. Start with the high-level patterns, then dig into the memories that still matter.
+            Session opened on {{ importedDate }}. Start with the high-level patterns, then dig into the memories that
+            still matter.
           </p>
         </div>
         <nav class="dashboard-nav">
@@ -45,34 +46,23 @@ onMounted(() => {
 
       <section class="stats-section">
         <div class="stats-grid">
-          <StatCard
-            icon="📸"
-            :value="isLoadingStats ? '…' : formatNumber(stats?.totalSnaps || 0)"
-            label="Total snaps"
-          />
-          <StatCard
-            icon="💬"
-            :value="isLoadingStats ? '…' : formatNumber(stats?.totalChats || 0)"
-            label="Chat messages"
-          />
-          <StatCard
-            icon="📖"
-            :value="isLoadingStats ? '…' : formatNumber(stats?.totalStories || 0)"
-            label="Stories posted"
-          />
-          <StatCard
-            icon="👥"
-            :value="formatNumber(stats?.totalFriends || 0)"
-            label="Friends"
-          />
+          <StatCard icon="📸" :value="isLoadingStats ? '…' : formatNumber(stats?.totalSnaps || 0)"
+            label="Total snaps" />
+          <StatCard icon="💬" :value="isLoadingStats ? '…' : formatNumber(stats?.totalChats || 0)"
+            label="Chat messages" />
+          <StatCard icon="📖" :value="isLoadingStats ? '…' : formatNumber(stats?.totalStories || 0)"
+            label="Stories posted" />
+          <StatCard icon="👥" :value="formatNumber(stats?.totalFriends || 0)" label="Friends" />
         </div>
       </section>
 
       <section class="hero-strip card">
         <div class="hero-strip-copy">
           <span class="strip-label">Fast read</span>
-          <h2>{{ stats?.bestStreak }} days was your peak streak, across {{ stats?.totalDays }} days of captured history.</h2>
-          <p>Your archive stretches from {{ stats?.dateRange.start }} to {{ stats?.dateRange.end }}, with enough media to justify a real exit plan instead of leaving it inside Snapchat.</p>
+          <h2>{{ stats?.bestStreak }} days was your peak streak, across {{ stats?.totalDays }} days of captured history.
+          </h2>
+          <p>Your archive stretches from {{ stats?.dateRange.start }} to {{ stats?.dateRange.end }}, with enough media
+            to justify a real exit plan instead of leaving it inside Snapchat.</p>
         </div>
         <router-link to="/export" class="btn btn-primary">Prepare export</router-link>
       </section>
@@ -393,6 +383,7 @@ onMounted(() => {
 }
 
 @media (max-width: 640px) {
+
   .page-header,
   .dashboard-nav,
   .export-content,
