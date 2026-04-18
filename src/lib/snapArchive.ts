@@ -57,7 +57,7 @@ export async function createArchiveSession(
   const sources: SnapZipSource[] = files.map((file, index) => ({ id: `source-${index}`, file }))
   const index = await buildSnapZipIndex(sources)
 
-  onProgress?.(30, 'Reading account metadata')
+   onProgress?.(30, 'Reading account metadata')
   const reader = new SnapchatArchiveReader(index)
   const account = await reader.readJsonFile<Account>(SNAP_JSON_PATHS.account)
 

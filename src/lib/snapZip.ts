@@ -190,5 +190,5 @@ function toSnapEntryMeta(entry: Entry, sourceId: SnapZipSourceId): SnapZipEntryM
 async function safeClose(reader: ZipReader<unknown>): Promise<void> {
   try {
     await reader.close()
-  } catch {}
+  } catch { }
 }
