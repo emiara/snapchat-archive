@@ -66,7 +66,7 @@ async function startImport() {
             <h3 class="info-title">What this session is for</h3>
             <ul class="info-list">
               <li>Turn a Snapchat takeout into a readable end-of-era recap.</li>
-              <li>Review memories and saved media without leaving the browser.</li>
+              <li>Review photos and saved media without leaving the browser.</li>
               <li>Package your images and videos for Immich, Google photos, or Apple Photos export.</li>
             </ul>
           </section>

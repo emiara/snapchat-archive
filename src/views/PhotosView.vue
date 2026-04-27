@@ -1,41 +1,41 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useArchiveStore } from '../stores/archive'
-import MemoryCard from '../components/MemoryCard.vue'
-import type { Memory } from '../types'
+import PhotoCard from '../components/PhotoCard.vue'
+import type { Photo } from '../types'
 
 const archiveStore = useArchiveStore()
 
 const selectedType = ref<string>('all')
 const selectedYear = ref<string>('all')
-const selectedMemory = ref<Memory | null>(null)
+const selectedPhoto = ref<Photo | null>(null)
 
 const types = ['all', 'Image', 'Video']
 
 const years = computed(() => {
   const yearSet = new Set<string>()
-  archiveStore.memoriesList.forEach((memory) => {
-    yearSet.add(memory.Date.substring(0, 4))
+  archiveStore.photosList.forEach((photo) => {
+    yearSet.add(photo.Date.substring(0, 4))
   })
   return ['all', ...Array.from(yearSet).sort().reverse()]
 })
 
-const filteredMemories = computed(() => {
-  return archiveStore.memoriesList
-    .filter((memory) => {
-      if (selectedType.value !== 'all' && memory['Media Type'] !== selectedType.value) return false
-      if (selectedYear.value !== 'all' && !memory.Date.startsWith(selectedYear.value)) return false
+const filteredPhotos = computed(() => {
+  return archiveStore.photosList
+    .filter((photo) => {
+      if (selectedType.value !== 'all' && photo['Media Type'] !== selectedType.value) return false
+      if (selectedYear.value !== 'all' && !photo.Date.startsWith(selectedYear.value)) return false
       return true
     })
     .sort((a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime())
 })
 
-function selectMemory(memory: Memory) {
-  selectedMemory.value = memory
+function selectPhoto(photo: Photo) {
+  selectedPhoto.value = photo
 }
 
 function closeDetail() {
-  selectedMemory.value = null
+  selectedPhoto.value = null
 }
 </script>
 
@@ -44,9 +44,9 @@ function closeDetail() {
     <div class="container">
       <header class="page-header">
         <span class="eyebrow">Review room</span>
-        <h1>Review the memories before you move them.</h1>
+        <h1>Review the photos before you move them.</h1>
         <p class="page-subtitle">
-          {{ filteredMemories.length }} items in the current filter set.
+          {{ filteredPhotos.length }} items in the current filter set.
         </p>
       </header>
 
@@ -66,13 +66,12 @@ function closeDetail() {
         </div>
       </div>
 
-      <div class="memories-grid" v-if="filteredMemories.length > 0">
-        <MemoryCard v-for="(memory, index) in filteredMemories" :key="index" :memory="memory"
-          @click="selectMemory(memory)" />
+      <div class="photos-grid" v-if="filteredPhotos.length > 0">
+        <PhotoCard v-for="(photo, index) in filteredPhotos" :key="index" :photo="photo" @click="selectPhoto(photo)" />
       </div>
 
       <div v-else class="empty-state">
-        <p>No memories match those filters.</p>
+        <p>No photos match those filters.</p>
         <button class="btn btn-secondary" @click="selectedType = 'all'; selectedYear = 'all'">
           Clear filters
         </button>
@@ -80,24 +79,24 @@ function closeDetail() {
     </div>
 
     <Transition name="slide">
-      <div v-if="selectedMemory" class="detail-overlay" @click.self="closeDetail">
+      <div v-if="selectedPhoto" class="detail-overlay" @click.self="closeDetail">
         <div class="detail-drawer card">
           <button class="close-btn" @click="closeDetail" aria-label="Close">×</button>
 
           <div class="detail-header">
-            <span class="detail-type badge">{{ selectedMemory['Media Type'] }}</span>
-            <span class="detail-date">{{ selectedMemory.Date }}</span>
+            <span class="detail-type badge">{{ selectedPhoto['Media Type'] }}</span>
+            <span class="detail-date">{{ selectedPhoto.Date }}</span>
           </div>
 
           <div class="detail-content">
             <div class="detail-preview">
               <div class="preview-placeholder">
-                <span>{{ selectedMemory['Media Type'] === 'Video' ? '🎬' : '🖼️' }}</span>
+                <span>{{ selectedPhoto['Media Type'] === 'Video' ? '🎬' : '🖼️' }}</span>
               </div>
             </div>
 
             <div class="detail-info">
-              <p v-if="selectedMemory.Location"><strong>Location:</strong> {{ selectedMemory.Location }}</p>
+              <p v-if="selectedPhoto.Location"><strong>Location:</strong> {{ selectedPhoto.Location }}</p>
             </div>
           </div>
         </div>
@@ -160,7 +159,7 @@ function closeDetail() {
   border-color: var(--accent);
 }
 
-.memories-grid {
+.photos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: var(--space-md);

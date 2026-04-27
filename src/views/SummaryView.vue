@@ -52,7 +52,7 @@ onMounted(() => {
             </div>
             <div class="stat-item">
               <span class="stat-value">{{ (stats?.totalDays ?? 0).toLocaleString() }}</span>
-              <span class="stat-label">days of memories</span>
+              <span class="stat-label">days of photos</span>
             </div>
             <div class="stat-item">
               <span class="stat-value">{{ stats?.totalFriends ?? 0 }}</span>
@@ -83,7 +83,7 @@ onMounted(() => {
             These recap cards are assistive, not authoritative. They are here to make the archive legible and emotionally navigable, not to tell you what your life meant.
           </p>
           <p>
-            If something feels off, trust the raw memories more than the summary layer and jump into the review screens.
+            If something feels off, trust the raw photos more than the summary layer and jump into the review screens.
           </p>
         </section>
       </template>

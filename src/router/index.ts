@@ -27,10 +27,10 @@ const routes: RouteRecordRaw[] = [
     meta: { title: 'Your Snapchat Recap' }
   },
   {
-    path: '/memories',
-    name: 'memories',
-    component: () => import('../views/MemoriesView.vue'),
-    meta: { title: 'Review Your Memories' }
+    path: '/photos',
+    name: 'photos',
+    component: () => import('../views/PhotosView.vue'),
+    meta: { title: 'Review Your Photos' }
   },
   {
     path: '/summary',
@@ -42,7 +42,7 @@ const routes: RouteRecordRaw[] = [
     path: '/export',
     name: 'export',
     component: () => import('../views/ExportView.vue'),
-    meta: { title: 'Export Memories' }
+    meta: { title: 'Export Photos' }
   },
   {
     path: '/privacy',

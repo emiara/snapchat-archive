@@ -40,7 +40,7 @@ async function startExport() {
     <div class="container container-narrow">
       <header class="page-header">
         <span class="eyebrow">Exit with your files</span>
-        <h1>Take the memories somewhere you control.</h1>
+        <h1>Take the photos somewhere you control.</h1>
         <p class="page-subtitle">
           This screen packages the archive for the next home. Immich is the main handoff path, with JSON as the audit-friendly fallback.
         </p>

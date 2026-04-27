@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Friend, Memory, Story, ComputedArchiveStats, ExportConfig, ChatHistory, SnapHistory, StoryHistoryJson, MemoriesJson } from '../types'
+import type { Friend, Photo, Story, ComputedArchiveStats, ExportConfig, ChatHistory, SnapHistory, StoryHistoryJson, PhotosJson } from '../types'
 import type { ArchiveSession, ArchiveProgressCallback } from '../lib/snapArchive'
 import { createArchiveSession, SNAP_JSON_PATHS } from '../lib/snapArchive'
 import { computeStats } from '../lib/computeStats'
@@ -23,7 +23,7 @@ export const useArchiveStore = defineStore('archive', () => {
   const friendsList = ref<Friend[]>([])
   const chatHistory = ref<ChatHistory | null>(null)
   const snapHistory = ref<SnapHistory | null>(null)
-  const memoriesList = ref<Memory[]>([])
+  const photosList = ref<Photo[]>([])
   const storiesList = ref<Story[]>([])
   const archiveStats = ref<ComputedArchiveStats | null>(null)
   const isLoadingStats = ref(false)
@@ -42,7 +42,7 @@ export const useArchiveStore = defineStore('archive', () => {
 
   const importedDate = ref<string | null>(null)
 
-  const totalMemories = computed(() => memoriesList.value.length)
+  const totalPhotos = computed(() => photosList.value.length)
   const totalFriends = computed(() => friendsList.value.length)
   const totalChats = computed(() => {
     if (!chatHistory.value) return 0
@@ -105,9 +105,9 @@ export const useArchiveStore = defineStore('archive', () => {
       const storyJson = await reader.readJsonFile<StoryHistoryJson>(SNAP_JSON_PATHS.storyHistory)
       storiesList.value = storyJson?.['Your Story Views'] ?? []
 
-      updateProgress(75, 'Loading memories')
-      const memoriesJson = await reader.readJsonFile<MemoriesJson>(SNAP_JSON_PATHS.memoriesHistory)
-      memoriesList.value = memoriesJson?.['Saved Media'] ?? []
+      updateProgress(75, 'Loading photos')
+      const photosJson = await reader.readJsonFile<PhotosJson>(SNAP_JSON_PATHS.photosHistory)
+      photosList.value = photosJson?.['Saved Media'] ?? []
 
       updateProgress(90, 'Computing stats')
       archiveStats.value = computeStats({
@@ -165,7 +165,7 @@ export const useArchiveStore = defineStore('archive', () => {
     friendsList.value = []
     chatHistory.value = null
     snapHistory.value = null
-    memoriesList.value = []
+    photosList.value = []
     storiesList.value = []
     archiveStats.value = null
     isLoadingStats.value = false
@@ -185,7 +185,7 @@ export const useArchiveStore = defineStore('archive', () => {
     friendsList,
     chatHistory,
     snapHistory,
-    memoriesList,
+    photosList,
     storiesList,
     archiveStats,
     isLoadingStats,
@@ -194,7 +194,7 @@ export const useArchiveStore = defineStore('archive', () => {
     archiveSession,
     selectedFiles,
     importedDate,
-    totalMemories,
+    totalPhotos,
     totalFriends,
     totalChats,
     startProcessing,

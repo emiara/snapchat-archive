@@ -35,7 +35,7 @@
           The recap language is intentionally assistive. It is there to surface patterns and give emotional structure to the archive, not to replace the raw media or invent certainty.
         </p>
         <p>
-          If a recap card feels wrong, trust the underlying memories more than the summary. The archive browser should always remain the source of truth.
+          If a recap card feels wrong, trust the underlying photos more than the summary. The archive browser should always remain the source of truth.
         </p>
       </section>
 
@@ -43,7 +43,7 @@
         <h2>Data lifecycle</h2>
         <ul>
           <li><strong>Import:</strong> Open the takeout zip locally</li>
-          <li><strong>Session:</strong> Review the recap and memory views in-browser</li>
+          <li><strong>Session:</strong> Review the recap and photo views in-browser</li>
           <li><strong>Export:</strong> Package the useful media for Immich or JSON</li>
           <li><strong>Close:</strong> End the session without leaving a cloud copy behind</li>
         </ul>
@@ -52,7 +52,7 @@
       <section class="privacy-section">
         <h2>Project angle</h2>
         <p>
-          The product direction is simple: Snapchat memories should be portable, legible, and easy to move into tools that respect ownership more than retention.
+          The product direction is simple: Snapchat photos should be portable, legible, and easy to move into tools that respect ownership more than retention.
         </p>
       </section>
 
@@ -65,7 +65,7 @@
           That means recap first, review second, export third. The interface should help people reflect, keep what matters, and leave with the files in a form they can actually own.
         </p>
         <p class="about-tagline">
-          &quot;Load the zip. Read the recap. Move on with the memories.&quot;
+          &quot;Load the zip. Read the recap. Move on with the photos.&quot;
         </p>
       </section>
 

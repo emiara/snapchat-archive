@@ -6,7 +6,7 @@
           <span class="eyebrow">Free software · Local-first</span>
           <h1>Your archive, your machine.</h1>
           <p class="hero-subtitle">
-            Drop your Snapchat takeout zip. Browse memories, export what matters. Nothing leaves your browser.
+            Drop your Snapchat takeout zip. Browse photos, export what matters. Nothing leaves your browser.
           </p>
           <div class="hero-actions">
             <router-link to="/import" class="btn btn-primary">Open archive</router-link>
@@ -47,7 +47,7 @@
             </div>
             <div class="rail-block accent">
               <span class="rail-title">Export</span>
-              <p>Take your memories with you, into a new tomorrow.</p>
+              <p>Take your photos with you, into a new tomorrow.</p>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@
           <div class="flow-step">
             <span class="step-num">2</span>
             <h3>Browse locally</h3>
-            <p>Memories, stories, chats—all in your browser</p>
+            <p>Photos, stories, chats—all in your browser</p>
           </div>
           <div class="flow-step">
             <span class="step-num">3</span>

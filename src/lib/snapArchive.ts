@@ -24,7 +24,7 @@ export const SNAP_JSON_PATHS = {
   friends: 'json/friends.json',
   chatHistory: 'json/chat_history.json',
   snapHistory: 'json/snap_history.json',
-  memoriesHistory: 'json/memories_history.json',
+  photosHistory: 'json/photos_history.json',
   storyHistory: 'json/story_history.json',
 }
 
@@ -72,7 +72,7 @@ export async function createArchiveSession(
       friendCount: friends.length,
       hasChatHistory: Boolean(findEntryByPath(index, SNAP_JSON_PATHS.chatHistory)),
       hasSnapHistory: Boolean(findEntryByPath(index, SNAP_JSON_PATHS.snapHistory)),
-      hasMemoriesHistory: Boolean(findEntryByPath(index, SNAP_JSON_PATHS.memoriesHistory)),
+      hasPhotosHistory: Boolean(findEntryByPath(index, SNAP_JSON_PATHS.photosHistory)),
       hasStoryHistory: Boolean(findEntryByPath(index, SNAP_JSON_PATHS.storyHistory)),
     },
   }

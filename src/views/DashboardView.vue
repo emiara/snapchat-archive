@@ -34,12 +34,12 @@ onMounted(() => {
           <span class="eyebrow">Recap overview</span>
           <h1>Your Snapchat chapter, compressed.</h1>
           <p class="page-subtitle">
-            Session opened on {{ importedDate }}. Start with the high-level patterns, then dig into the memories that
+            Session opened on {{ importedDate }}. Start with the high-level patterns, then dig into the photos that
             still matter.
           </p>
         </div>
         <nav class="dashboard-nav">
-          <router-link to="/memories" class="btn btn-secondary">Open review room</router-link>
+          <router-link to="/photos" class="btn btn-secondary">Open review room</router-link>
           <router-link to="/summary" class="btn btn-primary">Read the story</router-link>
         </nav>
       </header>
@@ -85,7 +85,7 @@ onMounted(() => {
             <div class="timeline-stats">
               <div class="timeline-stat">
                 <span class="stat-value">{{ stats?.totalDays }}</span>
-                <span class="stat-label">days of memories</span>
+                <span class="stat-label">days of photos</span>
               </div>
               <div class="timeline-stat">
                 <span class="stat-value">{{ stats?.bestStreak }}</span>

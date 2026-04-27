@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useArchiveStore } from '../stores/archive'
 
 const route = useRoute()
+route.fullPath
 const router = useRouter()
 const store = useArchiveStore()
 
@@ -12,7 +13,7 @@ const isMobileMenuOpen = ref(false)
 // Only active after archive upload
 const archiveNavItems = [
   { path: '/dashboard', label: 'Recap' },
-  { path: '/memories', label: 'Review' },
+  { path: '/photos', label: 'Review' },
   { path: '/summary', label: 'Story' },
   { path: '/export', label: 'Export' },
   { path: '/privacy', label: 'Privacy' },

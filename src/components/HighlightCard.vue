@@ -18,7 +18,7 @@
     <p class="highlight-description">{{ highlight.description }}</p>
 
     <div v-if="relatedCount > 0" class="highlight-related">
-      <span class="related-label">{{ relatedCount }} related memories</span>
+      <span class="related-label">{{ relatedCount }} related photos</span>
     </div>
   </article>
 </template>
@@ -31,7 +31,7 @@ interface Highlight {
   title: string
   description: string
   confidence?: string
-  relatedMemories?: string[]
+  relatedPhotos?: string[]
 }
 
 const props = defineProps<{
@@ -42,7 +42,7 @@ const categoryIcon = computed(() => {
   const icons: Record<string, string> = {
     relationship: '❤️',
     milestone: '🎯',
-    memory: '💭',
+    photo: '💭',
     stat: '📊'
   }
   return icons[props.highlight.category] || '✨'
@@ -58,7 +58,7 @@ const confidenceLabel = computed(() => {
   return labels[confidence] || 'Unknown confidence'
 })
 
-const relatedCount = computed(() => props.highlight.relatedMemories?.length || 0)
+const relatedCount = computed(() => props.highlight.relatedPhotos?.length || 0)
 </script>
 
 <style scoped>

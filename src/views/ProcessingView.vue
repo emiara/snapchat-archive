@@ -73,7 +73,7 @@ onMounted(() => {
           </div>
           <div class="detail-item">
             <span class="detail-icon" :class="{ complete: archiveStore.processingProgress >= 40 }">✓</span>
-            <span>Map memories and saved media</span>
+            <span>Map photos and saved media</span>
           </div>
           <div class="detail-item">
             <span class="detail-icon" :class="{ complete: archiveStore.processingProgress >= 60 }">✓</span>
